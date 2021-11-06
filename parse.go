@@ -6,7 +6,6 @@ package stack
 
 import (
 	"bufio"
-	"errors"
 	"io"
 	"regexp"
 	"strconv"
@@ -16,15 +15,13 @@ var (
 	reBlank     = regexp.MustCompile(`^\s*$`)
 	reGoroutine = regexp.MustCompile(`^\s*goroutine (\d+) \[([^\]]*)\]:\s*$`)
 	reCall      = regexp.MustCompile(`^\s*` +
-		`(created by )?` + //marker
-		`(([\w/.]+/)?[\w]+)\.` + //package
-		`(\(([^:.)]*)\)\.)?` + //optional type
-		`([\w\.]+)` + //function
+		`(created by )?` + // marker
+		`(([\w/.]+/)?[\w]+)\.` + // package
+		`(\(([^:.)]*)\)\.)?` + // optional type
+		`([\w\.]+)` + // function
 		`(\(.*\))?` + // args
 		`\s*$`)
 	rePos = regexp.MustCompile(`^\s*(.*):(\d+)( .*)?$`)
-
-	errBreakParse = errors.New("break parse")
 )
 
 // Scanner splits an input stream into lines in a way that is consumable by
@@ -149,7 +146,7 @@ func parseFrame(scanner *Scanner) (Frame, bool) {
 	// if ok is false, then this is a broken state.
 	// we got the func but not the file that must follow
 	// the consumed line can be recovered from the frame
-	//TODO: push back the fun raw
+	// TODO: push back the fun raw
 	return frame, ok
 }
 
