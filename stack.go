@@ -117,21 +117,23 @@ func (p Position) less(other Position) bool {
 	return p.Line < other.Line
 }
 
+// Format implements fmt.Formatter
 func (s Summary) Format(w fmt.State, r rune) {
 	tw := tabwriter.NewWriter(w, 0, 0, 1, ' ', 0)
 	for i, c := range s.Calls {
 		if i > 0 {
 			fmt.Fprintf(tw, "\n\n")
-			tw.Flush()
+			_ = tw.Flush()
 		}
 		fmt.Fprint(tw, c)
 	}
-	tw.Flush()
+	_ = tw.Flush()
 	if s.Total > 0 && w.Flag('+') {
 		fmt.Fprintf(w, "\n\n%d goroutines, %d unique", s.Total, len(s.Calls))
 	}
 }
 
+// Format implements fmt.Formatter
 func (c Call) Format(w fmt.State, r rune) {
 	for i, g := range c.Groups {
 		if i > 0 {
@@ -144,6 +146,7 @@ func (c Call) Format(w fmt.State, r rune) {
 	}
 }
 
+// Format implements fmt.Formatter
 func (g Group) Format(w fmt.State, r rune) {
 	fmt.Fprintf(w, "[%v]: ", g.State)
 	for i, gr := range g.Goroutines {
@@ -154,10 +157,12 @@ func (g Group) Format(w fmt.State, r rune) {
 	}
 }
 
+// Format implements fmt.Formatter
 func (f Frame) Format(w fmt.State, c rune) {
 	fmt.Fprintf(w, "%v:\t%v", f.Position, f.Function)
 }
 
+// Format implements fmt.Formatter
 func (f Function) Format(w fmt.State, c rune) {
 	if f.Type != "" {
 		fmt.Fprintf(w, "(%v).", f.Type)
@@ -165,6 +170,7 @@ func (f Function) Format(w fmt.State, c rune) {
 	fmt.Fprintf(w, "%v", f.Name)
 }
 
+// Format implements fmt.Formatter
 func (p Position) Format(w fmt.State, c rune) {
 	fmt.Fprintf(w, "%v:%v", p.Filename, p.Line)
 }

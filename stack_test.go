@@ -182,7 +182,12 @@ FAIL
 	}} {
 		t.Run(test.name, func(t *testing.T) {
 			buf := &bytes.Buffer{}
-			stack.Process(buf, strings.NewReader(test.input))
+
+			err := stack.Process(buf, strings.NewReader(test.input))
+			if err != nil {
+				t.Fatalf("error %v is not <nil>", err)
+			}
+
 			expect := strings.TrimSpace(test.expect)
 			got := strings.TrimSpace(buf.String())
 			if got != expect {
